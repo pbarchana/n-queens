@@ -85,12 +85,6 @@
       for (var i = 0; i < n; i++) {
         sum += row[i];
       }
-      // if (sum > 1) {
-      //   return false;
-      // } else {
-      //   return true;
-      // }
-
       return sum > 1 ? true : false;
 
     },
@@ -113,12 +107,24 @@
     // 
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex){
-      return false; // fixme
+      var n = this.get('n');
+      var rows = this.rows();
+      var sum = 0;
+      for (var i = 0; i < n; i++) {
+        sum += rows[i][colIndex];
+      }
+      return sum > 1 ? true : false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function(){
-      return false; // fixme
+      var n = this.get('n');
+      for (var i = 0; i < n; i++) {
+        if(this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
