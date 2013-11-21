@@ -134,12 +134,41 @@
     // 
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow){
-      return false; // fixme
+      var n = this.get('n');
+      var rows = this.rows();
+      var sum = 0;
+      // if(majorDiagonalColumnIndexAtFirstRow < 0){
+      //   var i = -1 * (majorDiagonalColumnIndexAtFirstRow);
+      // } else {
+      //   var i = 0;
+      // }
+
+      // for(; i < n ; i++) {
+      //   //console.log("[" + i +"] " + "[" + (i+majorDiagonalColumnIndexAtFirstRow) + "] ");
+      //   sum += rows[i][ i + majorDiagonalColumnIndexAtFirstRow];
+      // }
+      var colIndex = majorDiagonalColumnIndexAtFirstRow;
+      for (var rowIndex = 0; rowIndex < n; rowIndex++) {
+        if (this._isInBounds(rowIndex, colIndex)) {
+          sum += rows[rowIndex][colIndex];
+          colIndex++;
+        } else {
+          colIndex++;
+        }
+      }
+
+      return sum > 1 ? true : false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function(){
-      return false; // fixme
+      var n = this.get('n');
+      for (var i = -1*(n-1); i < n; i++) {
+        if(this.hasMajorDiagonalConflictAt(i)){
+          return true;
+        }
+      }
+      return false;
     },
 
 
