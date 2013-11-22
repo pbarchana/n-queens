@@ -19,7 +19,7 @@ window.findNRooksSolution = function(n){
   for (var r = 0; r < n; r++) {
     for (var c = 0; c < n; c++) {
       board.rows()[r][c] = 1;
-      if (board.hasRowConflictAt(r) || board.hasColConflictAt(c)) {
+      if (board.hasRowConflictAt(r) ||board.hasColConflictAt(c)) {
         board.rows()[r][c] = 0;
       }
     }
@@ -42,11 +42,13 @@ window.countNRooksSolutions = function(n){
       return;
     }
     for ( var col = 0; col < n ; col++){
-      board.rows()[row][col] = 1;
-      if (!board.hasRowConflictAt(row) && !board.hasColConflictAt(col)) {
+      // board.rows()[row][col] = 1;
+      board.togglePiece(row, col);
+      if (!board.hasColConflictAt(col)) {
         place(row+1);
       }
-      board.rows()[row][col] = 0;
+      board.togglePiece(row, col);
+      // board.rows()[row][col] = 0;
     }
   }
 
@@ -61,45 +63,30 @@ window.countNRooksSolutions = function(n){
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n){
   var solution = undefined;  
-  var count = 0;
-  var board = new Board({n : n});  // create new board    
-  
-  
-
-  var display = function(brd, cnt){
-    console.log("Solution " + cnt + "\n");
-    for (var i=0; i< n; i++)
-      console.log (" " + brd.get(i).toString() +"\n");
-  }
+  var board = new Board({n: n});
 
   var place = function (row) {
-  //  console.log("in place(" + row +")");
     if(row === n){
-      display(board, count);
       solution = board.rows();
-      count++;
       return;
     }
     for ( var col = 0; col < n ; col++){
-      //debugger
       board.rows()[row][col] = 1;
-      //console.log("row = " + row + " col= " + col + "set to " + board.get(row)[col]);
       if (!board.hasAnyQueenConflictsOn(row,col)){
-      //  console.log("calling place(" + (row+1) +")");
         place(row+1);
-        if((row+1) === n)
+        if (solution) {
+          // debugger;
           return;
+        }
       }
       board.rows()[row][col] = 0;
-      // console.log("row = " + row + " col= " + col + "set to " + board.get(row)[col]);
     }
   }
 
   place(0);
 
-  if (solution === undefined){
-    solution = {};
-    solution['n']=n;
+  if (solution === undefined) {
+    solution = new Board({n: n}).rows();
   }
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
